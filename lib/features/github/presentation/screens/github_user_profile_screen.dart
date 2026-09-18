@@ -128,7 +128,36 @@ class _GitHubUserProfileScreenState
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 12),
-          if (state.repositories.isEmpty && !state.isLoadingRepos)
+          if (state.errorMessage != null && state.user != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    color: Colors.redAccent,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      state.errorMessage!,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      ref
+                          .read(userProfileNotifierProvider.notifier)
+                          .loadRepositories(
+                            widget.username,
+                            reset: state.repositories.isEmpty,
+                          );
+                    },
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            ),
+          if (state.repositories.isEmpty && !state.isLoadingRepos && state.errorMessage == null)
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 24),
               child: Center(
