@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/github_dependencies.dart';
 import '../providers/search_users_state.dart';
+import 'github_user_profile_screen.dart';
 
 class GitHubUserSearchScreen extends ConsumerStatefulWidget {
   const GitHubUserSearchScreen({super.key});
@@ -153,7 +154,13 @@ class _GitHubUserSearchScreenState
               Icons.chevron_right,
             ),
             onTap: () {
-              // Profile navigation comes later.
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => GitHubUserProfileScreen(
+                    username: user.login,
+                  ),
+                ),
+              );
             },
           );
         },

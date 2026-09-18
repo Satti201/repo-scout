@@ -12,6 +12,8 @@ import '../../domain/usecases/get_github_user_repositories.dart';
 import '../../domain/usecases/search_github_users.dart';
 import 'search_users_notifier.dart';
 import 'search_users_state.dart';
+import 'user_profile_notifier.dart';
+import 'user_profile_state.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   return createDioClient();
@@ -69,4 +71,15 @@ final searchUsersNotifierProvider =
   final useCase = ref.watch(searchGitHubUsersUseCaseProvider);
 
   return SearchUsersNotifier(useCase);
+});
+
+final userProfileNotifierProvider =
+    StateNotifierProvider<UserProfileNotifier, UserProfileState>((ref) {
+  final profileUseCase = ref.watch(getGitHubUserProfileUseCaseProvider);
+  final reposUseCase = ref.watch(getGitHubUserRepositoriesUseCaseProvider);
+
+  return UserProfileNotifier(
+    profileUseCase,
+    reposUseCase,
+  );
 });
