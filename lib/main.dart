@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'features/github/presentation/screens/github_user_search_screen.dart';
+
 void main() {
   runApp(
     const ProviderScope(
@@ -24,11 +26,7 @@ class RepoScoutApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const Scaffold(
-        body: Center(
-          child: Text('RepoScout - GitHub Explorer'),
-        ),
-      ),
+      home: const GitHubUserSearchScreen(),
     );
   }
 }
