@@ -32,4 +32,20 @@ class GitHubRepoModel extends GitHubRepoEntity {
       isPrivate: json['private'] as bool? ?? false,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'full_name': fullName,
+      'description': description,
+      'html_url': htmlUrl,
+      'stargazers_count': stargazersCount,
+      'forks_count': forksCount,
+      'open_issues_count': openIssuesCount,
+      'language': language,
+      'updated_at': updatedAt?.toIso8601String(),
+      'private': isPrivate,
+    };
+  }
 }

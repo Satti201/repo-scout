@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/storage/local_storage.dart';
 import 'features/github/presentation/screens/github_user_search_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await initializeLocalStorage();
+
   runApp(
     const ProviderScope(
       child: RepoScoutApp(),

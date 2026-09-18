@@ -1,8 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:hive/hive.dart';
 
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/storage/local_storage.dart';
+import '../../data/datasources/github_local_data_source.dart';
+import '../../data/datasources/github_local_data_source_impl.dart';
 import '../../data/datasources/github_remote_data_source.dart';
 import '../../data/datasources/github_remote_data_source_impl.dart';
 import '../../data/repositories/github_repository_impl.dart';
@@ -24,6 +28,15 @@ final githubRemoteDataSourceProvider =
   final dio = ref.watch(dioProvider);
 
   return GitHubRemoteDataSourceImpl(dio);
+});
+
+final githubLocalDataSourceProvider =
+    Provider<GitHubLocalDataSource>((ref) {
+  return GitHubLocalDataSourceImpl(
+    profilesBox: Hive.box(githubProfilesBox),
+    repositoriesBox: Hive.box(githubReposBox),
+    favoritesBox: Hive.box(githubFavoritesBox),
+  );
 });
 
 final githubRepositoryProvider =

@@ -30,4 +30,20 @@ class GitHubUserModel extends GitHubUserEntity {
       following: json['following'] as int? ?? 0,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'login': login,
+      'avatar_url': avatarUrl,
+      'html_url': htmlUrl,
+      'name': name,
+      'bio': bio,
+      'company': company,
+      'location': location,
+      'public_repos': publicRepos,
+      'followers': followers,
+      'following': following,
+    };
+  }
 }
