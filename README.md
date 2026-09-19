@@ -74,6 +74,10 @@ GitHub API
 - **Data Layer**: Implements repository contracts, orchestrating remote data fetching (Dio) and local persistence (Hive) with dedicated data models and exception handling.
 - **Presentation Layer**: Built with Flutter and Riverpod (`StateNotifier`), providing reactive UI, clean state models, pagination triggers, and user-friendly error banners.
 
+### Architecture Diagram
+
+![RepoScout Architecture](docs/architecture/repo_scout_architecture.png)
+
 ### Offline Strategy
 
 RepoScout uses a remote-first caching strategy:
@@ -83,6 +87,23 @@ RepoScout uses a remote-first caching strategy:
 3. Network, server, and rate-limit failures fall back to cached data when available.
 4. `NotFoundException` and parsing failures are not masked by stale cache.
 5. Connectivity status is used only for UX hints and never to bypass remote requests.
+
+## Engineering Decisions
+
+- **Why Clean Architecture**  
+  Separates UI widgets, network infrastructure, storage mechanisms, and core business rules into distinct layers. This ensures business logic remains pure Dart without dependencies on Flutter or third-party packages, making features highly testable and refactorable.
+
+- **Why Repository Pattern**  
+  Coordinates remote and local data sources behind an abstract domain contract. The presentation and domain layers remain completely unaware of whether a response originated from Dio or Hive, preventing infrastructure leakage upward.
+
+- **Why Remote-First Caching**  
+  Prioritizes live, up-to-date GitHub data for developer queries while treating local cache as an automated resilience layer. When network drops or API rate limits are encountered, cached data seamlessly keeps the user workflow uninterrupted.
+
+- **Why Hive**  
+  Provides fast, lightweight, key-value storage that perfectly matches our need to store JSON-like profile objects, paginated repository pages, and user bookmarks without the overhead or migration complexity of a relational SQLite database.
+
+- **Why Explicit Exception Mapping**  
+  Distinguishes between recoverable and unrecoverable failures. Transient issues like network outages, server 5xx errors, and rate limits trigger cache fallback, whereas domain 404s (`NotFoundException`) and data parsing errors are propagated immediately to prevent masking invalid states with stale cache.
 
 ## Features
 
