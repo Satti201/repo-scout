@@ -43,9 +43,12 @@ final githubRepositoryProvider =
     Provider<GitHubRepository>((ref) {
   final remoteDataSource =
       ref.watch(githubRemoteDataSourceProvider);
+  final localDataSource =
+      ref.watch(githubLocalDataSourceProvider);
 
   return GitHubRepositoryImpl(
-    remoteDataSource,
+    remoteDataSource: remoteDataSource,
+    localDataSource: localDataSource,
   );
 });
 
