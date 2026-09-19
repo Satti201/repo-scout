@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/legacy.dart';
 
+import '../../../../core/errors/exceptions.dart';
+import '../../../../core/network/connectivity_service.dart';
 import '../../domain/usecases/get_github_user_profile.dart';
 import '../../domain/usecases/get_github_user_repositories.dart';
 import 'user_profile_state.dart';
@@ -7,11 +9,13 @@ import 'user_profile_state.dart';
 class UserProfileNotifier extends StateNotifier<UserProfileState> {
   final GetGitHubUserProfileUseCase getUserProfileUseCase;
   final GetGitHubUserRepositoriesUseCase getUserRepositoriesUseCase;
+  final ConnectivityService connectivityService;
 
-  UserProfileNotifier(
-    this.getUserProfileUseCase,
-    this.getUserRepositoriesUseCase,
-  ) : super(const UserProfileState());
+  UserProfileNotifier({
+    required this.getUserProfileUseCase,
+    required this.getUserRepositoriesUseCase,
+    required this.connectivityService,
+  }) : super(const UserProfileState());
 
   Future<void> loadProfile(String username) async {
     state = const UserProfileState(
@@ -19,11 +23,13 @@ class UserProfileNotifier extends StateNotifier<UserProfileState> {
     );
 
     try {
+      final isOnline = await connectivityService.isOnline;
       final user = await getUserProfileUseCase(username);
 
       state = state.copyWith(
         user: user,
         isLoadingProfile: false,
+        isUsingCachedProfile: !isOnline,
         clearError: true,
       );
 
@@ -34,7 +40,7 @@ class UserProfileNotifier extends StateNotifier<UserProfileState> {
     } catch (e) {
       state = state.copyWith(
         isLoadingProfile: false,
-        errorMessage: e.toString(),
+        errorMessage: _friendlyMessage(e),
       );
     }
   }
@@ -57,6 +63,7 @@ class UserProfileNotifier extends StateNotifier<UserProfileState> {
     );
 
     try {
+      final isOnline = await connectivityService.isOnline;
       final repos = await getUserRepositoriesUseCase(
         username: username,
         page: page,
@@ -72,12 +79,39 @@ class UserProfileNotifier extends StateNotifier<UserProfileState> {
               ],
         currentRepoPage: page,
         hasMoreRepos: repos.length == 30,
+        isUsingCachedRepositories: !isOnline,
       );
     } catch (e) {
+      final message = (!reset && state.repositories.isNotEmpty)
+          ? 'Could not load more repositories. Check your connection and retry.'
+          : (state.repositories.isEmpty
+              ? 'Could not load repositories.'
+              : _friendlyMessage(e));
+
       state = state.copyWith(
         isLoadingRepos: false,
-        errorMessage: e.toString(),
+        errorMessage: message,
       );
     }
+  }
+
+  String _friendlyMessage(Object error) {
+    if (error is NetworkException) {
+      return 'No internet connection and no cached data is available.';
+    }
+
+    if (error is RateLimitException) {
+      return 'GitHub API rate limit reached. Try again later.';
+    }
+
+    if (error is NotFoundException) {
+      return 'GitHub user not found.';
+    }
+
+    if (error is ServerException) {
+      return 'GitHub is unavailable right now. Please try again.';
+    }
+
+    return 'Something went wrong.';
   }
 }

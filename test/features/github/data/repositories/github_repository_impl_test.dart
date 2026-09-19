@@ -48,6 +48,9 @@ class FakeGitHubLocalDataSource implements GitHubLocalDataSource {
   final Map<String, List<GitHubRepoModel>> cachedRepositories = {};
   final Map<String, GitHubUserModel> favorites = {};
 
+  Exception? addFavoriteException;
+  Exception? removeFavoriteException;
+
   @override
   Future<void> cacheUserProfile(GitHubUserModel user) async {
     cachedProfiles[user.login.toLowerCase()] = user;
@@ -77,11 +80,13 @@ class FakeGitHubLocalDataSource implements GitHubLocalDataSource {
 
   @override
   Future<void> addFavorite(GitHubUserModel user) async {
+    if (addFavoriteException != null) throw addFavoriteException!;
     favorites[user.login.toLowerCase()] = user;
   }
 
   @override
   Future<void> removeFavorite(String username) async {
+    if (removeFavoriteException != null) throw removeFavoriteException!;
     favorites.remove(username.toLowerCase());
   }
 

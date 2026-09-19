@@ -140,6 +140,27 @@ class _GitHubUserProfileScreenState
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(16),
         children: [
+          if (state.isUsingCachedProfile || state.isUsingCachedRepositories)
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.cloud_off),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Showing cached data. Some information may be outdated.',
+                    ),
+                  ),
+                ],
+              ),
+            ),
           _buildProfileHeader(user),
           const SizedBox(height: 24),
           Text(

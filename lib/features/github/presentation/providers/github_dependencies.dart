@@ -1,8 +1,10 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:hive/hive.dart';
 
+import '../../../../core/network/connectivity_service.dart';
 import '../../../../core/network/dio_client.dart';
 import '../../../../core/storage/local_storage.dart';
 import '../../data/datasources/github_local_data_source.dart';
@@ -24,6 +26,16 @@ import 'search_users_notifier.dart';
 import 'search_users_state.dart';
 import 'user_profile_notifier.dart';
 import 'user_profile_state.dart';
+
+final connectivityProvider = Provider<Connectivity>((ref) {
+  return Connectivity();
+});
+
+final connectivityServiceProvider = Provider<ConnectivityService>((ref) {
+  return ConnectivityService(
+    ref.watch(connectivityProvider),
+  );
+});
 
 final dioProvider = Provider<Dio>((ref) {
   return createDioClient();
@@ -123,10 +135,12 @@ final userProfileNotifierProvider =
     StateNotifierProvider<UserProfileNotifier, UserProfileState>((ref) {
   final profileUseCase = ref.watch(getGitHubUserProfileUseCaseProvider);
   final reposUseCase = ref.watch(getGitHubUserRepositoriesUseCaseProvider);
+  final connectivityService = ref.watch(connectivityServiceProvider);
 
   return UserProfileNotifier(
-    profileUseCase,
-    reposUseCase,
+    getUserProfileUseCase: profileUseCase,
+    getUserRepositoriesUseCase: reposUseCase,
+    connectivityService: connectivityService,
   );
 });
 

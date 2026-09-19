@@ -13,6 +13,9 @@ class UserProfileState {
   final int currentRepoPage;
   final bool hasMoreRepos;
 
+  final bool isUsingCachedProfile;
+  final bool isUsingCachedRepositories;
+
   const UserProfileState({
     this.isLoadingProfile = false,
     this.isLoadingRepos = false,
@@ -21,6 +24,8 @@ class UserProfileState {
     this.errorMessage,
     this.currentRepoPage = 1,
     this.hasMoreRepos = true,
+    this.isUsingCachedProfile = false,
+    this.isUsingCachedRepositories = false,
   });
 
   UserProfileState copyWith({
@@ -32,6 +37,8 @@ class UserProfileState {
     bool clearError = false,
     int? currentRepoPage,
     bool? hasMoreRepos,
+    bool? isUsingCachedProfile,
+    bool? isUsingCachedRepositories,
   }) {
     return UserProfileState(
       isLoadingProfile:
@@ -48,6 +55,10 @@ class UserProfileState {
           currentRepoPage ?? this.currentRepoPage,
       hasMoreRepos:
           hasMoreRepos ?? this.hasMoreRepos,
+      isUsingCachedProfile:
+          isUsingCachedProfile ?? this.isUsingCachedProfile,
+      isUsingCachedRepositories:
+          isUsingCachedRepositories ?? this.isUsingCachedRepositories,
     );
   }
 }
