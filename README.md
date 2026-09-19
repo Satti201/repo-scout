@@ -6,6 +6,28 @@ A production-style Flutter GitHub explorer built to demonstrate clean architectu
 
 RepoScout lets users search GitHub profiles, inspect public repositories, save favorite users, and continue viewing previously cached data when connectivity is unavailable.
 
+## Quick Demo
+
+1. Search a GitHub username.
+2. Open a profile.
+3. Browse repositories.
+4. Save the user to Favorites.
+5. Reopen the profile while offline to see cached fallback behavior.
+
+## Screenshots
+
+| Search | Profile |
+|---|---|
+| ![Search](docs/screenshots/search.png) | ![Profile](docs/screenshots/profile.png) |
+
+| Repositories | Favorites |
+|---|---|
+| ![Repositories](docs/screenshots/repositories.png) | ![Favorites](docs/screenshots/favorites.png) |
+
+### Offline Cache
+
+![Offline cached data](docs/screenshots/offline-cache.png)
+
 ## Why This Project Exists
 
 RepoScout is not intended to be a feature-heavy GitHub clone.
@@ -105,63 +127,14 @@ RepoScout uses a remote-first caching strategy:
 - **Why Explicit Exception Mapping**  
   Distinguishes between recoverable and unrecoverable failures. Transient issues like network outages, server 5xx errors, and rate limits trigger cache fallback, whereas domain 404s (`NotFoundException`) and data parsing errors are propagated immediately to prevent masking invalid states with stale cache.
 
-## Features
+## Core Features & User Flows
 
-- GitHub user search
-- Paginated user results
-- User profiles
-- Paginated public repositories
-- Pull-to-refresh
-- Persistent favorites
-- Hive local caching
-- Offline profile/repository fallback
-- Friendly error states
-- Cached-data indicators
-- Clean Architecture
-- Riverpod dependency injection
-- Automated unit and widget tests
-- GitHub Actions CI
-
-## Key User Flows
-
-### Search
-Search GitHub users with paginated REST API results.
-
-### Profile
-Open a user profile to view:
-- avatar
-- bio
-- company
-- location
-- followers/following
-- public repository count
-
-### Repositories
-Browse paginated public repositories with:
-- description
-- stars
-- forks
-- language
-
-### Favorites
-Bookmark GitHub users locally and access them after restarting the app.
-
-### Offline Usage
-Previously viewed profiles and repository pages are cached with Hive and can be displayed when remote requests fail because of connectivity, server, or rate-limit issues.
-
-## Screenshots
-
-| Search | Profile |
-|---|---|
-| ![Search](docs/screenshots/search.png) | ![Profile](docs/screenshots/profile.png) |
-
-| Repositories | Favorites |
-|---|---|
-| ![Repositories](docs/screenshots/repositories.png) | ![Favorites](docs/screenshots/favorites.png) |
-
-### Offline Cache
-
-![Offline cached data](docs/screenshots/offline-cache.png)
+- **User Search**: Query GitHub users with paginated REST API results.
+- **User Profiles**: View avatar, bio, company, location, followers/following counts, and public repo counts.
+- **Repository Exploration**: Browse paginated public repositories with stars, forks, language badges, and descriptions.
+- **Persistent Favorites**: Save and bookmark GitHub users locally with immediate offline availability.
+- **Resilient Offline Mode**: Previously viewed profiles and repository pages are automatically retrieved from Hive cache when network is unavailable.
+- **Cached-Data Indicators**: Clear banner alerting users when cached data is being served.
 
 ## Getting Started
 
@@ -190,7 +163,7 @@ Previously viewed profiles and repository pages are cached with Hive and can be 
 
 ## Testing
 
-The project contains tests covering:
+The project contains automated unit and widget tests covering:
 
 - Local Hive caching
 - Repository remote/local coordination
