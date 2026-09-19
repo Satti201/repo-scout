@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/github_dependencies.dart';
 import '../providers/search_users_state.dart';
+import 'favorites_screen.dart';
 import 'github_user_profile_screen.dart';
 
 class GitHubUserSearchScreen extends ConsumerStatefulWidget {
@@ -45,6 +46,18 @@ class _GitHubUserSearchScreenState
     return Scaffold(
       appBar: AppBar(
         title: const Text('RepoScout'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const FavoritesScreen(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [

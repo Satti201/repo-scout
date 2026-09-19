@@ -55,11 +55,30 @@ class _GitHubUserProfileScreenState
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(favoritesNotifierProvider);
     final state = ref.watch(userProfileNotifierProvider);
+    final user = state.user;
+    final isFavorite = user != null
+        ? ref.read(favoritesNotifierProvider.notifier).isFavorite(user.login)
+        : false;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.username),
+        actions: [
+          if (user != null)
+            IconButton(
+              icon: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: isFavorite ? Colors.redAccent : null,
+              ),
+              onPressed: () {
+                ref
+                    .read(favoritesNotifierProvider.notifier)
+                    .toggleFavorite(user);
+              },
+            ),
+        ],
       ),
       body: _buildContent(state),
     );

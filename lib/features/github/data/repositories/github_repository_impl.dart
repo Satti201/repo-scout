@@ -131,4 +131,38 @@ class GitHubRepositoryImpl implements GitHubRepository {
       // Ignore cache write failure.
     }
   }
+
+  @override
+  Future<void> addFavorite(GitHubUserEntity user) async {
+    final model = GitHubUserModel(
+      id: user.id,
+      login: user.login,
+      avatarUrl: user.avatarUrl,
+      htmlUrl: user.htmlUrl,
+      name: user.name,
+      bio: user.bio,
+      company: user.company,
+      location: user.location,
+      publicRepos: user.publicRepos,
+      followers: user.followers,
+      following: user.following,
+    );
+
+    await localDataSource.addFavorite(model);
+  }
+
+  @override
+  Future<void> removeFavorite(String username) {
+    return localDataSource.removeFavorite(username);
+  }
+
+  @override
+  bool isFavorite(String username) {
+    return localDataSource.isFavorite(username);
+  }
+
+  @override
+  List<GitHubUserEntity> getFavorites() {
+    return localDataSource.getFavorites();
+  }
 }

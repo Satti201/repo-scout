@@ -202,4 +202,28 @@ void main() {
       );
     });
   });
+
+  group('favorites', () {
+    test('addFavorite stores user in local datasource', () async {
+      await repository.addFavorite(testUser);
+
+      expect(fakeLocal.isFavorite('octocat'), true);
+      expect(repository.isFavorite('octocat'), true);
+      expect(repository.getFavorites().length, 1);
+      expect(repository.getFavorites().first.login, 'octocat');
+    });
+
+    test('removeFavorite removes user from local datasource', () async {
+      await repository.addFavorite(testUser);
+      expect(repository.isFavorite('octocat'), true);
+
+      await repository.removeFavorite('octocat');
+      expect(repository.isFavorite('octocat'), false);
+      expect(repository.getFavorites(), isEmpty);
+    });
+
+    test('isFavorite returns false for non-favorited user', () {
+      expect(repository.isFavorite('non_existent'), false);
+    });
+  });
 }

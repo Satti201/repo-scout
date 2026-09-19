@@ -29,6 +29,18 @@ class FakeGitHubRepository implements GitHubRepository {
   }) async {
     return [];
   }
+
+  @override
+  Future<void> addFavorite(GitHubUserEntity user) async {}
+
+  @override
+  Future<void> removeFavorite(String username) async {}
+
+  @override
+  bool isFavorite(String username) => false;
+
+  @override
+  List<GitHubUserEntity> getFavorites() => [];
 }
 
 void main() {

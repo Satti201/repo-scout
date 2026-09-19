@@ -19,4 +19,16 @@ abstract class GitHubRepository {
     int page = 1,
     int perPage = 30,
   });
+
+  /// Adds a user to favorites.
+  Future<void> addFavorite(GitHubUserEntity user);
+
+  /// Removes a user from favorites by username.
+  Future<void> removeFavorite(String username);
+
+  /// Checks if a username is favorited.
+  bool isFavorite(String username);
+
+  /// Returns all favorited users.
+  List<GitHubUserEntity> getFavorites();
 }
