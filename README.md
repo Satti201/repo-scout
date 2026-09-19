@@ -2,7 +2,7 @@
 
 ![Flutter CI](https://github.com/Satti201/repo-scout/actions/workflows/flutter_ci.yml/badge.svg)
 
-A production-style Flutter GitHub explorer built to demonstrate clean architecture, resilient API integration, offline-first UX, local persistence, pagination, favorites, automated testing, and CI.
+A production-style Flutter GitHub explorer built to demonstrate clean architecture, resilient API integration, remote-first caching with offline fallback, local persistence, pagination, favorites, automated testing, and CI.
 
 RepoScout lets users search GitHub profiles, inspect public repositories, save favorite users, and continue viewing previously cached data when connectivity is unavailable.
 
@@ -130,7 +130,17 @@ Previously viewed profiles and repository pages are cached with Hive and can be 
 
 ## Screenshots
 
-Screenshots and demo media will be added in the next portfolio polish phase.
+| Search | Profile |
+|---|---|
+| ![Search](docs/screenshots/search.png) | ![Profile](docs/screenshots/profile.png) |
+
+| Repositories | Favorites |
+|---|---|
+| ![Repositories](docs/screenshots/repositories.png) | ![Favorites](docs/screenshots/favorites.png) |
+
+### Offline Cache
+
+![Offline cached data](docs/screenshots/offline-cache.png)
 
 ## Getting Started
 
