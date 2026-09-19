@@ -132,74 +132,111 @@ void main() {
   });
 
   group('getUserProfile', () {
-    test('Remote profile succeeds -> returns remote profile and writes to cache', () async {
-      fakeRemote.userProfileToReturn = testUser;
+    test(
+      'Remote profile succeeds -> returns remote profile and writes to cache',
+      () async {
+        fakeRemote.userProfileToReturn = testUser;
 
-      final result = await repository.getUserProfile('octocat');
+        final result = await repository.getUserProfile('octocat');
 
-      expect(result.login, 'octocat');
-      expect(fakeLocal.getCachedUserProfile('octocat'), testUser);
-    });
+        expect(result.login, 'octocat');
+        expect(fakeLocal.getCachedUserProfile('octocat'), testUser);
+      },
+    );
 
-    test('Remote profile throws NetworkException + cache exists -> returns cached profile', () async {
-      fakeRemote.userProfileException = const NetworkException('Connection error');
-      await fakeLocal.cacheUserProfile(testUser);
+    test(
+      'Remote profile throws NetworkException + cache exists -> returns cached profile',
+      () async {
+        fakeRemote.userProfileException = const NetworkException(
+          'Connection error',
+        );
+        await fakeLocal.cacheUserProfile(testUser);
 
-      final result = await repository.getUserProfile('octocat');
+        final result = await repository.getUserProfile('octocat');
 
-      expect(result.login, 'octocat');
-      expect(result.name, 'The Octocat');
-    });
+        expect(result.login, 'octocat');
+        expect(result.name, 'The Octocat');
+      },
+    );
 
-    test('Remote profile throws NetworkException + no cache -> NetworkException escapes', () async {
-      fakeRemote.userProfileException = const NetworkException('Connection error');
+    test(
+      'Remote profile throws NetworkException + no cache -> NetworkException escapes',
+      () async {
+        fakeRemote.userProfileException = const NetworkException(
+          'Connection error',
+        );
 
-      expect(
-        () => repository.getUserProfile('octocat'),
-        throwsA(isA<NetworkException>()),
-      );
-    });
+        expect(
+          () => repository.getUserProfile('octocat'),
+          throwsA(isA<NetworkException>()),
+        );
+      },
+    );
 
-    test('Remote throws NotFoundException + cache exists -> DO NOT return cache and rethrow NotFoundException', () async {
-      fakeRemote.userProfileException = const NotFoundException('User not found');
-      await fakeLocal.cacheUserProfile(testUser);
+    test(
+      'Remote throws NotFoundException + cache exists -> DO NOT return cache and rethrow NotFoundException',
+      () async {
+        fakeRemote.userProfileException = const NotFoundException(
+          'User not found',
+        );
+        await fakeLocal.cacheUserProfile(testUser);
 
-      expect(
-        () => repository.getUserProfile('octocat'),
-        throwsA(isA<NotFoundException>()),
-      );
-    });
+        expect(
+          () => repository.getUserProfile('octocat'),
+          throwsA(isA<NotFoundException>()),
+        );
+      },
+    );
   });
 
   group('getUserRepositories', () {
-    test('Remote repositories succeed -> returns remote repos and caches username/page', () async {
-      fakeRemote.repositoriesToReturn = [testRepo];
+    test(
+      'Remote repositories succeed -> returns remote repos and caches username/page',
+      () async {
+        fakeRemote.repositoriesToReturn = [testRepo];
 
-      final result = await repository.getUserRepositories(username: 'octocat', page: 1);
+        final result = await repository.getUserRepositories(
+          username: 'octocat',
+          page: 1,
+        );
 
-      expect(result.length, 1);
-      expect(result.first.name, 'Hello-World');
-      final cached = fakeLocal.getCachedUserRepositories(username: 'octocat', page: 1);
-      expect(cached, isNotNull);
-      expect(cached!.first.name, 'Hello-World');
-    });
+        expect(result.length, 1);
+        expect(result.first.name, 'Hello-World');
+        final cached = fakeLocal.getCachedUserRepositories(
+          username: 'octocat',
+          page: 1,
+        );
+        expect(cached, isNotNull);
+        expect(cached!.first.name, 'Hello-World');
+      },
+    );
 
-    test('Remote repositories fail + cached page exists -> returns cached page', () async {
-      fakeRemote.repositoriesException = const NetworkException('Connection error');
-      await fakeLocal.cacheUserRepositories(
-        username: 'octocat',
-        page: 1,
-        repositories: [testRepo],
-      );
+    test(
+      'Remote repositories fail + cached page exists -> returns cached page',
+      () async {
+        fakeRemote.repositoriesException = const NetworkException(
+          'Connection error',
+        );
+        await fakeLocal.cacheUserRepositories(
+          username: 'octocat',
+          page: 1,
+          repositories: [testRepo],
+        );
 
-      final result = await repository.getUserRepositories(username: 'octocat', page: 1);
+        final result = await repository.getUserRepositories(
+          username: 'octocat',
+          page: 1,
+        );
 
-      expect(result.length, 1);
-      expect(result.first.name, 'Hello-World');
-    });
+        expect(result.length, 1);
+        expect(result.first.name, 'Hello-World');
+      },
+    );
 
     test('Remote repositories fail + no cache -> rethrows exception', () async {
-      fakeRemote.repositoriesException = const ServerException('500 internal error');
+      fakeRemote.repositoriesException = const ServerException(
+        '500 internal error',
+      );
 
       expect(
         () => repository.getUserRepositories(username: 'octocat', page: 1),

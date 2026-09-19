@@ -9,10 +9,7 @@ import '../providers/user_profile_state.dart';
 class GitHubUserProfileScreen extends ConsumerStatefulWidget {
   final String username;
 
-  const GitHubUserProfileScreen({
-    super.key,
-    required this.username,
-  });
+  const GitHubUserProfileScreen({super.key, required this.username});
 
   @override
   ConsumerState<GitHubUserProfileScreen> createState() =>
@@ -86,9 +83,7 @@ class _GitHubUserProfileScreenState
 
   Widget _buildContent(UserProfileState state) {
     if (state.isLoadingProfile && state.user == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (state.errorMessage != null && state.user == null) {
@@ -104,10 +99,7 @@ class _GitHubUserProfileScreenState
                 color: Colors.redAccent,
               ),
               const SizedBox(height: 12),
-              Text(
-                state.errorMessage!,
-                textAlign: TextAlign.center,
-              ),
+              Text(state.errorMessage!, textAlign: TextAlign.center),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
@@ -163,26 +155,16 @@ class _GitHubUserProfileScreenState
             ),
           _buildProfileHeader(user),
           const SizedBox(height: 24),
-          Text(
-            'Repositories',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          Text('Repositories', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 12),
           if (state.errorMessage != null && state.user != null)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.error_outline,
-                    color: Colors.redAccent,
-                  ),
+                  const Icon(Icons.error_outline, color: Colors.redAccent),
                   const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      state.errorMessage!,
-                    ),
-                  ),
+                  Expanded(child: Text(state.errorMessage!)),
                   TextButton(
                     onPressed: () {
                       ref
@@ -197,23 +179,19 @@ class _GitHubUserProfileScreenState
                 ],
               ),
             ),
-          if (state.repositories.isEmpty && !state.isLoadingRepos && state.errorMessage == null)
+          if (state.repositories.isEmpty &&
+              !state.isLoadingRepos &&
+              state.errorMessage == null)
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 24),
-              child: Center(
-                child: Text('No public repositories found'),
-              ),
+              child: Center(child: Text('No public repositories found')),
             )
           else
-            ...state.repositories.map(
-              (repo) => _buildRepoCard(repo),
-            ),
+            ...state.repositories.map((repo) => _buildRepoCard(repo)),
           if (state.isLoadingRepos)
             const Padding(
               padding: EdgeInsets.all(16),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: Center(child: CircularProgressIndicator()),
             ),
         ],
       ),
@@ -223,10 +201,7 @@ class _GitHubUserProfileScreenState
   Widget _buildProfileHeader(GitHubUserEntity user) {
     return Column(
       children: [
-        CircleAvatar(
-          radius: 48,
-          backgroundImage: NetworkImage(user.avatarUrl),
-        ),
+        CircleAvatar(radius: 48, backgroundImage: NetworkImage(user.avatarUrl)),
         const SizedBox(height: 12),
         Text(
           user.name ?? user.login,
@@ -234,23 +209,19 @@ class _GitHubUserProfileScreenState
         ),
         Text(
           '@${user.login}',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
         ),
         if (user.bio != null) ...[
           const SizedBox(height: 12),
-          Text(
-            user.bio!,
-            textAlign: TextAlign.center,
-          ),
+          Text(user.bio!, textAlign: TextAlign.center),
         ],
         if (user.company != null) ...[
           const SizedBox(height: 8),
           Text('Company: ${user.company}'),
         ],
-        if (user.location != null)
-          Text('Location: ${user.location}'),
+        if (user.location != null) Text('Location: ${user.location}'),
         const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -267,10 +238,7 @@ class _GitHubUserProfileScreenState
   Widget _buildStat(String label, int value) {
     return Column(
       children: [
-        Text(
-          value.toString(),
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        Text(value.toString(), style: Theme.of(context).textTheme.titleMedium),
         Text(label),
       ],
     );
@@ -284,10 +252,7 @@ class _GitHubUserProfileScreenState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              repo.name,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text(repo.name, style: Theme.of(context).textTheme.titleMedium),
             if (repo.description != null) ...[
               const SizedBox(height: 8),
               Text(repo.description!),
@@ -295,17 +260,11 @@ class _GitHubUserProfileScreenState
             const SizedBox(height: 12),
             Row(
               children: [
-                const Icon(
-                  Icons.star_border,
-                  size: 18,
-                ),
+                const Icon(Icons.star_border, size: 18),
                 const SizedBox(width: 4),
                 Text(repo.stargazersCount.toString()),
                 const SizedBox(width: 16),
-                const Icon(
-                  Icons.call_split,
-                  size: 18,
-                ),
+                const Icon(Icons.call_split, size: 18),
                 const SizedBox(width: 4),
                 Text(repo.forksCount.toString()),
                 if (repo.language != null) ...[

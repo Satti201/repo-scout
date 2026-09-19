@@ -20,9 +20,7 @@ class FavoritesState {
     return FavoritesState(
       users: users ?? this.users,
       isLoading: isLoading ?? this.isLoading,
-      errorMessage: clearError
-          ? null
-          : errorMessage ?? this.errorMessage,
+      errorMessage: clearError ? null : errorMessage ?? this.errorMessage,
     );
   }
 }

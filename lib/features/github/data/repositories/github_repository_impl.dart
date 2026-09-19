@@ -71,24 +71,15 @@ class GitHubRepositoryImpl implements GitHubRepository {
 
       return repositories;
     } on NetworkException {
-      final cached = _getCachedRepositories(
-        username: username,
-        page: page,
-      );
+      final cached = _getCachedRepositories(username: username, page: page);
       if (cached != null) return cached;
       rethrow;
     } on ServerException {
-      final cached = _getCachedRepositories(
-        username: username,
-        page: page,
-      );
+      final cached = _getCachedRepositories(username: username, page: page);
       if (cached != null) return cached;
       rethrow;
     } on RateLimitException {
-      final cached = _getCachedRepositories(
-        username: username,
-        page: page,
-      );
+      final cached = _getCachedRepositories(username: username, page: page);
       if (cached != null) return cached;
       rethrow;
     }

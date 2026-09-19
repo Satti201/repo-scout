@@ -11,10 +11,6 @@ class SearchGitHubUsersUseCase {
     int page = 1,
     int perPage = 30,
   }) {
-    return repository.searchUsers(
-      query: query,
-      page: page,
-      perPage: perPage,
-    );
+    return repository.searchUsers(query: query, page: page, perPage: perPage);
   }
 }

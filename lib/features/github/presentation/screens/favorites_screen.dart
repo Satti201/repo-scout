@@ -26,9 +26,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     final state = ref.watch(favoritesNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Favorite Users'),
-      ),
+      appBar: AppBar(title: const Text('Favorite Users')),
       body: _buildContent(state),
     );
   }
@@ -41,11 +39,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.favorite_border,
-                size: 64,
-                color: Colors.grey,
-              ),
+              const Icon(Icons.favorite_border, size: 64, color: Colors.grey),
               const SizedBox(height: 16),
               Text(
                 'No favorites yet',
@@ -55,9 +49,9 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
               Text(
                 'Save GitHub users from their profile to find them here.',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
               ),
               if (state.errorMessage != null) ...[
                 const SizedBox(height: 16),
@@ -104,14 +98,9 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
                   backgroundImage: NetworkImage(user.avatarUrl),
                 ),
                 title: Text(user.login),
-                subtitle: Text(
-                  user.name ?? 'GitHub user',
-                ),
+                subtitle: Text(user.name ?? 'GitHub user'),
                 trailing: IconButton(
-                  icon: const Icon(
-                    Icons.favorite,
-                    color: Colors.redAccent,
-                  ),
+                  icon: const Icon(Icons.favorite, color: Colors.redAccent),
                   onPressed: () {
                     ref
                         .read(favoritesNotifierProvider.notifier)
@@ -121,9 +110,8 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => GitHubUserProfileScreen(
-                        username: user.login,
-                      ),
+                      builder: (_) =>
+                          GitHubUserProfileScreen(username: user.login),
                     ),
                   );
                 },

@@ -55,15 +55,18 @@ void main() {
     expect(notifier.state.users.first.login, 'octocat');
   });
 
-  test('toggleFavorite removes already favorited user and updates state', () async {
-    await notifier.toggleFavorite(testUser);
-    expect(notifier.isFavorite('octocat'), true);
-    expect(notifier.state.users.length, 1);
+  test(
+    'toggleFavorite removes already favorited user and updates state',
+    () async {
+      await notifier.toggleFavorite(testUser);
+      expect(notifier.isFavorite('octocat'), true);
+      expect(notifier.state.users.length, 1);
 
-    await notifier.toggleFavorite(testUser);
-    expect(notifier.isFavorite('octocat'), false);
-    expect(notifier.state.users, isEmpty);
-  });
+      await notifier.toggleFavorite(testUser);
+      expect(notifier.isFavorite('octocat'), false);
+      expect(notifier.state.users, isEmpty);
+    },
+  );
 
   test('loadFavorites updates state with existing favorites', () async {
     await fakeLocal.addFavorite(testUser);
@@ -74,27 +77,30 @@ void main() {
     expect(notifier.state.users.first.login, 'octocat');
   });
 
-  test('Case 6: Favorites write failure -> errorMessage set and existing favorites remain intact', () async {
-    // Populate an existing favorite
-    await fakeLocal.addFavorite(testUser);
-    notifier.loadFavorites();
-    expect(notifier.state.users.length, 1);
-    expect(notifier.state.errorMessage, isNull);
+  test(
+    'Case 6: Favorites write failure -> errorMessage set and existing favorites remain intact',
+    () async {
+      // Populate an existing favorite
+      await fakeLocal.addFavorite(testUser);
+      notifier.loadFavorites();
+      expect(notifier.state.users.length, 1);
+      expect(notifier.state.errorMessage, isNull);
 
-    const newUser = GitHubUserModel(
-      id: 2,
-      login: 'flutter',
-      avatarUrl: 'https://example.com/flutter.png',
-      htmlUrl: 'https://github.com/flutter',
-    );
+      const newUser = GitHubUserModel(
+        id: 2,
+        login: 'flutter',
+        avatarUrl: 'https://example.com/flutter.png',
+        htmlUrl: 'https://github.com/flutter',
+      );
 
-    // Simulate write failure
-    fakeLocal.addFavoriteException = Exception('Disk write error');
+      // Simulate write failure
+      fakeLocal.addFavoriteException = Exception('Disk write error');
 
-    await notifier.toggleFavorite(newUser);
+      await notifier.toggleFavorite(newUser);
 
-    expect(notifier.state.errorMessage, contains('Disk write error'));
-    expect(notifier.state.users.length, 1);
-    expect(notifier.state.users.first.login, 'octocat');
-  });
+      expect(notifier.state.errorMessage, contains('Disk write error'));
+      expect(notifier.state.users.length, 1);
+      expect(notifier.state.users.first.login, 'octocat');
+    },
+  );
 }

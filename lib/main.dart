@@ -9,11 +9,7 @@ Future<void> main() async {
 
   await initializeLocalStorage();
 
-  runApp(
-    const ProviderScope(
-      child: RepoScoutApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: RepoScoutApp()));
 }
 
 class RepoScoutApp extends StatelessWidget {

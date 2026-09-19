@@ -17,10 +17,7 @@ class GitHubLocalDataSourceImpl implements GitHubLocalDataSource {
 
   @override
   Future<void> cacheUserProfile(GitHubUserModel user) async {
-    await profilesBox.put(
-      user.login.toLowerCase(),
-      user.toJson(),
-    );
+    await profilesBox.put(user.login.toLowerCase(), user.toJson());
   }
 
   @override
@@ -29,9 +26,7 @@ class GitHubLocalDataSourceImpl implements GitHubLocalDataSource {
 
     if (raw == null) return null;
 
-    return GitHubUserModel.fromJson(
-      Map<String, dynamic>.from(raw as Map),
-    );
+    return GitHubUserModel.fromJson(Map<String, dynamic>.from(raw as Map));
   }
 
   String _repoPageKey(String username, int page) {
@@ -55,9 +50,7 @@ class GitHubLocalDataSourceImpl implements GitHubLocalDataSource {
     required String username,
     required int page,
   }) {
-    final raw = repositoriesBox.get(
-      _repoPageKey(username, page),
-    );
+    final raw = repositoriesBox.get(_repoPageKey(username, page));
 
     if (raw == null) return null;
 
@@ -65,42 +58,33 @@ class GitHubLocalDataSourceImpl implements GitHubLocalDataSource {
 
     return list
         .map(
-          (item) => GitHubRepoModel.fromJson(
-            Map<String, dynamic>.from(item as Map),
-          ),
+          (item) =>
+              GitHubRepoModel.fromJson(Map<String, dynamic>.from(item as Map)),
         )
         .toList();
   }
 
   @override
   Future<void> addFavorite(GitHubUserModel user) async {
-    await favoritesBox.put(
-      user.login.toLowerCase(),
-      user.toJson(),
-    );
+    await favoritesBox.put(user.login.toLowerCase(), user.toJson());
   }
 
   @override
   Future<void> removeFavorite(String username) {
-    return favoritesBox.delete(
-      username.toLowerCase(),
-    );
+    return favoritesBox.delete(username.toLowerCase());
   }
 
   @override
   bool isFavorite(String username) {
-    return favoritesBox.containsKey(
-      username.toLowerCase(),
-    );
+    return favoritesBox.containsKey(username.toLowerCase());
   }
 
   @override
   List<GitHubUserModel> getFavorites() {
     return favoritesBox.values
         .map(
-          (raw) => GitHubUserModel.fromJson(
-            Map<String, dynamic>.from(raw as Map),
-          ),
+          (raw) =>
+              GitHubUserModel.fromJson(Map<String, dynamic>.from(raw as Map)),
         )
         .toList();
   }

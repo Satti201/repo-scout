@@ -29,9 +29,7 @@ class SearchUsersState {
     return SearchUsersState(
       isLoading: isLoading ?? this.isLoading,
       users: users ?? this.users,
-      errorMessage: clearError
-          ? null
-          : errorMessage ?? this.errorMessage,
+      errorMessage: clearError ? null : errorMessage ?? this.errorMessage,
       query: query ?? this.query,
       currentPage: currentPage ?? this.currentPage,
       hasMore: hasMore ?? this.hasMore,

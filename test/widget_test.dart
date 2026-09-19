@@ -44,7 +44,9 @@ class FakeGitHubRepository implements GitHubRepository {
 }
 
 void main() {
-  testWidgets('App renders RepoScout search screen', (WidgetTester tester) async {
+  testWidgets('App renders RepoScout search screen', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [

@@ -41,22 +41,14 @@ class UserProfileState {
     bool? isUsingCachedRepositories,
   }) {
     return UserProfileState(
-      isLoadingProfile:
-          isLoadingProfile ?? this.isLoadingProfile,
-      isLoadingRepos:
-          isLoadingRepos ?? this.isLoadingRepos,
+      isLoadingProfile: isLoadingProfile ?? this.isLoadingProfile,
+      isLoadingRepos: isLoadingRepos ?? this.isLoadingRepos,
       user: user ?? this.user,
-      repositories:
-          repositories ?? this.repositories,
-      errorMessage: clearError
-          ? null
-          : errorMessage ?? this.errorMessage,
-      currentRepoPage:
-          currentRepoPage ?? this.currentRepoPage,
-      hasMoreRepos:
-          hasMoreRepos ?? this.hasMoreRepos,
-      isUsingCachedProfile:
-          isUsingCachedProfile ?? this.isUsingCachedProfile,
+      repositories: repositories ?? this.repositories,
+      errorMessage: clearError ? null : errorMessage ?? this.errorMessage,
+      currentRepoPage: currentRepoPage ?? this.currentRepoPage,
+      hasMoreRepos: hasMoreRepos ?? this.hasMoreRepos,
+      isUsingCachedProfile: isUsingCachedProfile ?? this.isUsingCachedProfile,
       isUsingCachedRepositories:
           isUsingCachedRepositories ?? this.isUsingCachedRepositories,
     );

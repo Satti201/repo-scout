@@ -51,9 +51,7 @@ class _GitHubUserSearchScreenState
             icon: const Icon(Icons.favorite),
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const FavoritesScreen(),
-                ),
+                MaterialPageRoute(builder: (_) => const FavoritesScreen()),
               );
             },
           ),
@@ -62,9 +60,7 @@ class _GitHubUserSearchScreenState
       body: Column(
         children: [
           _buildSearchBar(),
-          Expanded(
-            child: _buildContent(state),
-          ),
+          Expanded(child: _buildContent(state)),
         ],
       ),
     );
@@ -79,14 +75,10 @@ class _GitHubUserSearchScreenState
         decoration: InputDecoration(
           hintText: 'Search GitHub users',
           prefixIcon: const Icon(Icons.search),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         ),
         onSubmitted: (value) {
-          ref
-              .read(searchUsersNotifierProvider.notifier)
-              .search(value);
+          ref.read(searchUsersNotifierProvider.notifier).search(value);
         },
       ),
     );
@@ -94,37 +86,24 @@ class _GitHubUserSearchScreenState
 
   Widget _buildContent(SearchUsersState state) {
     if (state.isLoading && state.users.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (state.errorMessage != null && state.users.isEmpty) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Text(
-            state.errorMessage!,
-            textAlign: TextAlign.center,
-          ),
+          child: Text(state.errorMessage!, textAlign: TextAlign.center),
         ),
       );
     }
 
     if (state.query.isEmpty) {
-      return const Center(
-        child: Text(
-          'Search for a GitHub user',
-        ),
-      );
+      return const Center(child: Text('Search for a GitHub user'));
     }
 
     if (state.users.isEmpty) {
-      return const Center(
-        child: Text(
-          'No users found',
-        ),
-      );
+      return const Center(child: Text('No users found'));
     }
 
     return _buildUserList(state);
@@ -133,9 +112,7 @@ class _GitHubUserSearchScreenState
   Widget _buildUserList(SearchUsersState state) {
     return RefreshIndicator(
       onRefresh: () {
-        return ref
-            .read(searchUsersNotifierProvider.notifier)
-            .refresh();
+        return ref.read(searchUsersNotifierProvider.notifier).refresh();
       },
       child: ListView.builder(
         controller: _scrollController,
@@ -145,9 +122,7 @@ class _GitHubUserSearchScreenState
           if (index == state.users.length) {
             return const Padding(
               padding: EdgeInsets.all(16),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: Center(child: CircularProgressIndicator()),
             );
           }
 
@@ -155,23 +130,15 @@ class _GitHubUserSearchScreenState
 
           return ListTile(
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(
-                user.avatarUrl,
-              ),
+              backgroundImage: NetworkImage(user.avatarUrl),
             ),
             title: Text(user.login),
-            subtitle: Text(
-              user.name ?? 'GitHub user',
-            ),
-            trailing: const Icon(
-              Icons.chevron_right,
-            ),
+            subtitle: Text(user.name ?? 'GitHub user'),
+            trailing: const Icon(Icons.chevron_right),
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => GitHubUserProfileScreen(
-                    username: user.login,
-                  ),
+                  builder: (_) => GitHubUserProfileScreen(username: user.login),
                 ),
               );
             },

@@ -32,24 +32,20 @@ final connectivityProvider = Provider<Connectivity>((ref) {
 });
 
 final connectivityServiceProvider = Provider<ConnectivityService>((ref) {
-  return ConnectivityService(
-    ref.watch(connectivityProvider),
-  );
+  return ConnectivityService(ref.watch(connectivityProvider));
 });
 
 final dioProvider = Provider<Dio>((ref) {
   return createDioClient();
 });
 
-final githubRemoteDataSourceProvider =
-    Provider<GitHubRemoteDataSource>((ref) {
+final githubRemoteDataSourceProvider = Provider<GitHubRemoteDataSource>((ref) {
   final dio = ref.watch(dioProvider);
 
   return GitHubRemoteDataSourceImpl(dio);
 });
 
-final githubLocalDataSourceProvider =
-    Provider<GitHubLocalDataSource>((ref) {
+final githubLocalDataSourceProvider = Provider<GitHubLocalDataSource>((ref) {
   return GitHubLocalDataSourceImpl(
     profilesBox: Hive.box(githubProfilesBox),
     repositoriesBox: Hive.box(githubReposBox),
@@ -57,12 +53,9 @@ final githubLocalDataSourceProvider =
   );
 });
 
-final githubRepositoryProvider =
-    Provider<GitHubRepository>((ref) {
-  final remoteDataSource =
-      ref.watch(githubRemoteDataSourceProvider);
-  final localDataSource =
-      ref.watch(githubLocalDataSourceProvider);
+final githubRepositoryProvider = Provider<GitHubRepository>((ref) {
+  final remoteDataSource = ref.watch(githubRemoteDataSourceProvider);
+  final localDataSource = ref.watch(githubLocalDataSourceProvider);
 
   return GitHubRepositoryImpl(
     remoteDataSource: remoteDataSource,
@@ -70,86 +63,70 @@ final githubRepositoryProvider =
   );
 });
 
-final searchGitHubUsersUseCaseProvider =
-    Provider<SearchGitHubUsersUseCase>((ref) {
-  final repository =
-      ref.watch(githubRepositoryProvider);
+final searchGitHubUsersUseCaseProvider = Provider<SearchGitHubUsersUseCase>((
+  ref,
+) {
+  final repository = ref.watch(githubRepositoryProvider);
 
-  return SearchGitHubUsersUseCase(
-    repository,
-  );
+  return SearchGitHubUsersUseCase(repository);
 });
 
 final getGitHubUserProfileUseCaseProvider =
     Provider<GetGitHubUserProfileUseCase>((ref) {
-  final repository =
-      ref.watch(githubRepositoryProvider);
+      final repository = ref.watch(githubRepositoryProvider);
 
-  return GetGitHubUserProfileUseCase(
-    repository,
-  );
-});
+      return GetGitHubUserProfileUseCase(repository);
+    });
 
 final getGitHubUserRepositoriesUseCaseProvider =
     Provider<GetGitHubUserRepositoriesUseCase>((ref) {
-  final repository =
-      ref.watch(githubRepositoryProvider);
+      final repository = ref.watch(githubRepositoryProvider);
 
-  return GetGitHubUserRepositoriesUseCase(
-    repository,
-  );
-});
+      return GetGitHubUserRepositoriesUseCase(repository);
+    });
 
 final addFavoriteUseCaseProvider = Provider<AddFavoriteUseCase>((ref) {
-  return AddFavoriteUseCase(
-    ref.watch(githubRepositoryProvider),
-  );
+  return AddFavoriteUseCase(ref.watch(githubRepositoryProvider));
 });
 
 final removeFavoriteUseCaseProvider = Provider<RemoveFavoriteUseCase>((ref) {
-  return RemoveFavoriteUseCase(
-    ref.watch(githubRepositoryProvider),
-  );
+  return RemoveFavoriteUseCase(ref.watch(githubRepositoryProvider));
 });
 
 final isFavoriteUseCaseProvider = Provider<IsFavoriteUseCase>((ref) {
-  return IsFavoriteUseCase(
-    ref.watch(githubRepositoryProvider),
-  );
+  return IsFavoriteUseCase(ref.watch(githubRepositoryProvider));
 });
 
 final getFavoritesUseCaseProvider = Provider<GetFavoritesUseCase>((ref) {
-  return GetFavoritesUseCase(
-    ref.watch(githubRepositoryProvider),
-  );
+  return GetFavoritesUseCase(ref.watch(githubRepositoryProvider));
 });
 
 final searchUsersNotifierProvider =
     StateNotifierProvider<SearchUsersNotifier, SearchUsersState>((ref) {
-  final useCase = ref.watch(searchGitHubUsersUseCaseProvider);
+      final useCase = ref.watch(searchGitHubUsersUseCaseProvider);
 
-  return SearchUsersNotifier(useCase);
-});
+      return SearchUsersNotifier(useCase);
+    });
 
 final userProfileNotifierProvider =
     StateNotifierProvider<UserProfileNotifier, UserProfileState>((ref) {
-  final profileUseCase = ref.watch(getGitHubUserProfileUseCaseProvider);
-  final reposUseCase = ref.watch(getGitHubUserRepositoriesUseCaseProvider);
-  final connectivityService = ref.watch(connectivityServiceProvider);
+      final profileUseCase = ref.watch(getGitHubUserProfileUseCaseProvider);
+      final reposUseCase = ref.watch(getGitHubUserRepositoriesUseCaseProvider);
+      final connectivityService = ref.watch(connectivityServiceProvider);
 
-  return UserProfileNotifier(
-    getUserProfileUseCase: profileUseCase,
-    getUserRepositoriesUseCase: reposUseCase,
-    connectivityService: connectivityService,
-  );
-});
+      return UserProfileNotifier(
+        getUserProfileUseCase: profileUseCase,
+        getUserRepositoriesUseCase: reposUseCase,
+        connectivityService: connectivityService,
+      );
+    });
 
 final favoritesNotifierProvider =
     StateNotifierProvider<FavoritesNotifier, FavoritesState>((ref) {
-  return FavoritesNotifier(
-    addFavoriteUseCase: ref.watch(addFavoriteUseCaseProvider),
-    removeFavoriteUseCase: ref.watch(removeFavoriteUseCaseProvider),
-    isFavoriteUseCase: ref.watch(isFavoriteUseCaseProvider),
-    getFavoritesUseCase: ref.watch(getFavoritesUseCaseProvider),
-  );
-});
+      return FavoritesNotifier(
+        addFavoriteUseCase: ref.watch(addFavoriteUseCaseProvider),
+        removeFavoriteUseCase: ref.watch(removeFavoriteUseCaseProvider),
+        isFavoriteUseCase: ref.watch(isFavoriteUseCaseProvider),
+        getFavoritesUseCase: ref.watch(getFavoritesUseCaseProvider),
+      );
+    });

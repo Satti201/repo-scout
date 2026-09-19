@@ -21,10 +21,7 @@ class FavoritesNotifier extends StateNotifier<FavoritesState> {
   }) : super(const FavoritesState());
 
   void loadFavorites() {
-    state = state.copyWith(
-      users: getFavoritesUseCase(),
-      clearError: true,
-    );
+    state = state.copyWith(users: getFavoritesUseCase(), clearError: true);
   }
 
   bool isFavorite(String username) {
@@ -41,9 +38,7 @@ class FavoritesNotifier extends StateNotifier<FavoritesState> {
 
       loadFavorites();
     } catch (e) {
-      state = state.copyWith(
-        errorMessage: e.toString(),
-      );
+      state = state.copyWith(errorMessage: e.toString());
     }
   }
 }

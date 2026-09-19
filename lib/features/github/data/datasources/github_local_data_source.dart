@@ -2,13 +2,9 @@ import '../models/github_repo_model.dart';
 import '../models/github_user_model.dart';
 
 abstract class GitHubLocalDataSource {
-  Future<void> cacheUserProfile(
-    GitHubUserModel user,
-  );
+  Future<void> cacheUserProfile(GitHubUserModel user);
 
-  GitHubUserModel? getCachedUserProfile(
-    String username,
-  );
+  GitHubUserModel? getCachedUserProfile(String username);
 
   Future<void> cacheUserRepositories({
     required String username,
@@ -21,17 +17,11 @@ abstract class GitHubLocalDataSource {
     required int page,
   });
 
-  Future<void> addFavorite(
-    GitHubUserModel user,
-  );
+  Future<void> addFavorite(GitHubUserModel user);
 
-  Future<void> removeFavorite(
-    String username,
-  );
+  Future<void> removeFavorite(String username);
 
-  bool isFavorite(
-    String username,
-  );
+  bool isFavorite(String username);
 
   List<GitHubUserModel> getFavorites();
 }

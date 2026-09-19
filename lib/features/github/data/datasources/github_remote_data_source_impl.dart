@@ -19,28 +19,18 @@ class GitHubRemoteDataSourceImpl implements GitHubRemoteDataSource {
     try {
       final response = await dio.get(
         '/search/users',
-        queryParameters: {
-          'q': query,
-          'page': page,
-          'per_page': perPage,
-        },
+        queryParameters: {'q': query, 'page': page, 'per_page': perPage},
       );
 
       final items = response.data['items'] as List;
 
       return items
-          .map(
-            (item) => GitHubUserModel.fromJson(
-              item as Map<String, dynamic>,
-            ),
-          )
+          .map((item) => GitHubUserModel.fromJson(item as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
       _handleDioException(e);
     } on TypeError {
-      throw const ParsingException(
-        'Unable to parse GitHub response.',
-      );
+      throw const ParsingException('Unable to parse GitHub response.');
     }
   }
 
@@ -49,15 +39,11 @@ class GitHubRemoteDataSourceImpl implements GitHubRemoteDataSource {
     try {
       final response = await dio.get('/users/$username');
 
-      return GitHubUserModel.fromJson(
-        response.data as Map<String, dynamic>,
-      );
+      return GitHubUserModel.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
       _handleDioException(e);
     } on TypeError {
-      throw const ParsingException(
-        'Unable to parse GitHub response.',
-      );
+      throw const ParsingException('Unable to parse GitHub response.');
     }
   }
 
@@ -70,27 +56,18 @@ class GitHubRemoteDataSourceImpl implements GitHubRemoteDataSource {
     try {
       final response = await dio.get(
         '/users/$username/repos',
-        queryParameters: {
-          'page': page,
-          'per_page': perPage,
-        },
+        queryParameters: {'page': page, 'per_page': perPage},
       );
 
       final data = response.data as List;
 
       return data
-          .map(
-            (item) => GitHubRepoModel.fromJson(
-              item as Map<String, dynamic>,
-            ),
-          )
+          .map((item) => GitHubRepoModel.fromJson(item as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
       _handleDioException(e);
     } on TypeError {
-      throw const ParsingException(
-        'Unable to parse GitHub response.',
-      );
+      throw const ParsingException('Unable to parse GitHub response.');
     }
   }
 
@@ -107,9 +84,7 @@ class GitHubRemoteDataSourceImpl implements GitHubRemoteDataSource {
     final statusCode = e.response?.statusCode;
 
     if (statusCode == 404) {
-      throw const NotFoundException(
-        'Requested GitHub resource was not found.',
-      );
+      throw const NotFoundException('Requested GitHub resource was not found.');
     }
 
     if (statusCode == 403 || statusCode == 429) {

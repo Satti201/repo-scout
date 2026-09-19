@@ -61,67 +61,80 @@ void main() {
     );
   });
 
-  test('Case 1 & 2: Cached profile & repos + offline flag -> cache flags are true', () async {
-    // Setup cached data in local storage
-    await fakeLocal.cacheUserProfile(testUser);
-    await fakeLocal.cacheUserRepositories(
-      username: 'octocat',
-      page: 1,
-      repositories: [testRepo],
-    );
+  test(
+    'Case 1 & 2: Cached profile & repos + offline flag -> cache flags are true',
+    () async {
+      // Setup cached data in local storage
+      await fakeLocal.cacheUserProfile(testUser);
+      await fakeLocal.cacheUserRepositories(
+        username: 'octocat',
+        page: 1,
+        repositories: [testRepo],
+      );
 
-    // Simulate remote failure and offline connection
-    fakeRemote.userProfileException = const NetworkException('No connection');
-    fakeRemote.repositoriesException = const NetworkException('No connection');
-    fakeConnectivity.isConnected = false;
+      // Simulate remote failure and offline connection
+      fakeRemote.userProfileException = const NetworkException('No connection');
+      fakeRemote.repositoriesException = const NetworkException(
+        'No connection',
+      );
+      fakeConnectivity.isConnected = false;
 
-    await notifier.loadProfile('octocat');
+      await notifier.loadProfile('octocat');
 
-    expect(notifier.state.user, isNotNull);
-    expect(notifier.state.user!.login, 'octocat');
-    expect(notifier.state.isUsingCachedProfile, true);
-    expect(notifier.state.isUsingCachedRepositories, true);
-    expect(notifier.state.repositories.length, 1);
-  });
+      expect(notifier.state.user, isNotNull);
+      expect(notifier.state.user!.login, 'octocat');
+      expect(notifier.state.isUsingCachedProfile, true);
+      expect(notifier.state.isUsingCachedRepositories, true);
+      expect(notifier.state.repositories.length, 1);
+    },
+  );
 
-  test('Case 3: Existing repos + page 2 failure -> existing list preserved and friendly error', () async {
-    fakeRemote.userProfileToReturn = testUser;
-    fakeRemote.repositoriesToReturn = List.generate(
-      30,
-      (i) => GitHubRepoModel(
-        id: 100 + i,
-        name: 'repo-$i',
-        fullName: 'octocat/repo-$i',
-        htmlUrl: 'https://github.com/octocat/repo-$i',
-      ),
-    );
+  test(
+    'Case 3: Existing repos + page 2 failure -> existing list preserved and friendly error',
+    () async {
+      fakeRemote.userProfileToReturn = testUser;
+      fakeRemote.repositoriesToReturn = List.generate(
+        30,
+        (i) => GitHubRepoModel(
+          id: 100 + i,
+          name: 'repo-$i',
+          fullName: 'octocat/repo-$i',
+          htmlUrl: 'https://github.com/octocat/repo-$i',
+        ),
+      );
 
-    // Load initial page successfully
-    await notifier.loadProfile('octocat');
-    expect(notifier.state.repositories.length, 30);
-    expect(notifier.state.hasMoreRepos, true);
+      // Load initial page successfully
+      await notifier.loadProfile('octocat');
+      expect(notifier.state.repositories.length, 30);
+      expect(notifier.state.hasMoreRepos, true);
 
-    // Page 2 fails
-    fakeRemote.repositoriesException = const NetworkException('Connection dropped');
-    await notifier.loadRepositories('octocat');
+      // Page 2 fails
+      fakeRemote.repositoriesException = const NetworkException(
+        'Connection dropped',
+      );
+      await notifier.loadRepositories('octocat');
 
-    expect(notifier.state.repositories.length, 30);
-    expect(
-      notifier.state.errorMessage,
-      'Could not load more repositories. Check your connection and retry.',
-    );
-  });
+      expect(notifier.state.repositories.length, 30);
+      expect(
+        notifier.state.errorMessage,
+        'Could not load more repositories. Check your connection and retry.',
+      );
+    },
+  );
 
-  test('Case 4: No cache + network failure -> friendly offline message', () async {
-    fakeRemote.userProfileException = const NetworkException('Offline');
+  test(
+    'Case 4: No cache + network failure -> friendly offline message',
+    () async {
+      fakeRemote.userProfileException = const NetworkException('Offline');
 
-    await notifier.loadProfile('unknown_user');
+      await notifier.loadProfile('unknown_user');
 
-    expect(
-      notifier.state.errorMessage,
-      'No internet connection and no cached data is available.',
-    );
-  });
+      expect(
+        notifier.state.errorMessage,
+        'No internet connection and no cached data is available.',
+      );
+    },
+  );
 
   test('Case 5: NotFoundException -> "GitHub user not found."', () async {
     fakeRemote.userProfileException = const NotFoundException('404 Not Found');

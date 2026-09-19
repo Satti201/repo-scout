@@ -18,9 +18,7 @@ class UserProfileNotifier extends StateNotifier<UserProfileState> {
   }) : super(const UserProfileState());
 
   Future<void> loadProfile(String username) async {
-    state = const UserProfileState(
-      isLoadingProfile: true,
-    );
+    state = const UserProfileState(isLoadingProfile: true);
 
     try {
       final isOnline = await connectivityService.isOnline;
@@ -33,10 +31,7 @@ class UserProfileNotifier extends StateNotifier<UserProfileState> {
         clearError: true,
       );
 
-      await loadRepositories(
-        username,
-        reset: true,
-      );
+      await loadRepositories(username, reset: true);
     } catch (e) {
       state = state.copyWith(
         isLoadingProfile: false,
@@ -45,10 +40,7 @@ class UserProfileNotifier extends StateNotifier<UserProfileState> {
     }
   }
 
-  Future<void> loadRepositories(
-    String username, {
-    bool reset = false,
-  }) async {
+  Future<void> loadRepositories(String username, {bool reset = false}) async {
     if (state.isLoadingRepos) return;
 
     final page = reset ? 1 : state.currentRepoPage + 1;
@@ -57,10 +49,7 @@ class UserProfileNotifier extends StateNotifier<UserProfileState> {
       return;
     }
 
-    state = state.copyWith(
-      isLoadingRepos: true,
-      clearError: true,
-    );
+    state = state.copyWith(isLoadingRepos: true, clearError: true);
 
     try {
       final isOnline = await connectivityService.isOnline;
@@ -71,12 +60,7 @@ class UserProfileNotifier extends StateNotifier<UserProfileState> {
 
       state = state.copyWith(
         isLoadingRepos: false,
-        repositories: reset
-            ? repos
-            : [
-                ...state.repositories,
-                ...repos,
-              ],
+        repositories: reset ? repos : [...state.repositories, ...repos],
         currentRepoPage: page,
         hasMoreRepos: repos.length == 30,
         isUsingCachedRepositories: !isOnline,
@@ -85,13 +69,10 @@ class UserProfileNotifier extends StateNotifier<UserProfileState> {
       final message = (!reset && state.repositories.isNotEmpty)
           ? 'Could not load more repositories. Check your connection and retry.'
           : (state.repositories.isEmpty
-              ? 'Could not load repositories.'
-              : _friendlyMessage(e));
+                ? 'Could not load repositories.'
+                : _friendlyMessage(e));
 
-      state = state.copyWith(
-        isLoadingRepos: false,
-        errorMessage: message,
-      );
+      state = state.copyWith(isLoadingRepos: false, errorMessage: message);
     }
   }
 

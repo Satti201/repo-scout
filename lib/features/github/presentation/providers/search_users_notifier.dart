@@ -7,7 +7,7 @@ class SearchUsersNotifier extends StateNotifier<SearchUsersState> {
   final SearchGitHubUsersUseCase searchUsersUseCase;
 
   SearchUsersNotifier(this.searchUsersUseCase)
-      : super(const SearchUsersState());
+    : super(const SearchUsersState());
 
   Future<void> search(String query) async {
     final trimmedQuery = query.trim();
@@ -24,10 +24,7 @@ class SearchUsersNotifier extends StateNotifier<SearchUsersState> {
     );
 
     try {
-      final users = await searchUsersUseCase(
-        query: trimmedQuery,
-        page: 1,
-      );
+      final users = await searchUsersUseCase(query: trimmedQuery, page: 1);
 
       state = state.copyWith(
         isLoading: false,
@@ -37,26 +34,18 @@ class SearchUsersNotifier extends StateNotifier<SearchUsersState> {
         clearError: true,
       );
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, errorMessage: e.toString());
     }
   }
 
   Future<void> loadMore() async {
-    if (state.isLoading ||
-        !state.hasMore ||
-        state.query.isEmpty) {
+    if (state.isLoading || !state.hasMore || state.query.isEmpty) {
       return;
     }
 
     final nextPage = state.currentPage + 1;
 
-    state = state.copyWith(
-      isLoading: true,
-      clearError: true,
-    );
+    state = state.copyWith(isLoading: true, clearError: true);
 
     try {
       final newUsers = await searchUsersUseCase(
@@ -66,18 +55,12 @@ class SearchUsersNotifier extends StateNotifier<SearchUsersState> {
 
       state = state.copyWith(
         isLoading: false,
-        users: [
-          ...state.users,
-          ...newUsers,
-        ],
+        users: [...state.users, ...newUsers],
         currentPage: nextPage,
         hasMore: newUsers.length == 30,
       );
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, errorMessage: e.toString());
     }
   }
 
